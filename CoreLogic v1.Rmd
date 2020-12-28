@@ -1,0 +1,16 @@
+---
+title: "CoreLogic"
+author: "Chris Eshleman"
+date: "TBD"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r}
+
+```
+
