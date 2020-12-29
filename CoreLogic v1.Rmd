@@ -9,8 +9,64 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r}
+library(olsrr) 
+```
+
+
+- Check for outliers or influential observations. 
+- Check index and other covariates for necessary transformations. Visual for the predictors and also a whatchamacallit for the index itself. 
+- Subset selection of inputs on index. Correlation analysis from there. Then machine learning on leftovers, consider adding to the mix. Does the best-scoring input really deviate strongly from the index? 
+- Treat the index as continuous. Technically, an index from 1-100 isn’t a pure continuous (quantitative) variable but it falls closer to that than other variable types. 
+- Potential follow-up: check variation of crime statistics across the Conrex-non Conrex divide. (Just use MSA designations.) 
+
+### Index 
+```{r}
+summary(mtcars) 
+plot(mtcars$disp[order(mtcars$disp)]) 
+```
 
 ```{r}
+fit = lm(disp ~ ., data = mtcars) 
+summary(fit)
+plot(fit)
 
+library(MASS)
+boxcox(fit,lambda=seq(-2,2,0.5)) 
+boxcox(fit,lambda=seq(-1,1,0.5)) 
+
+fit2 = lm(1/sqrt(disp) ~ ., data = mtcars) 
+plot(fit2)
+```
+
+### Outliers 
+
+```{r}
+ols_plot_cooksd_bar(fit) 
+ols_plot_resid_lev(fit)
+ols_plot_resid_stud_fit(fit)
+#plot(Q2.Dev$Sales.price,exp(m.q2.f$fitted.values), col='blue', pch=16, ylab= "Predicted Sales.price", xlab= "Actual Y",main="Regression Model")
+```
+
+
+### Initial selection 
+
+```{r}
+fit.selex = ols_step_best_subset(fit) 
+fit.selex 
+plot(fit.selex) 
+#plot(1:8,fit.selex$aic,xlab="Number of Predictors",ylab="AIC")
+```
+
+
+
+
+```{r}
+#selex = data.frame(disp ~ cyl + hp + wt + qsec + carb) 
+```
+
+
+```{r}
+fit2 = lm(disp ~ cyl + hp + wt + qsec + carb, data = mtcars) 
 ```
 
